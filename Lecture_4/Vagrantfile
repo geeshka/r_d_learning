@@ -1,0 +1,23 @@
+Vagrant.configure("2") do |config|
+  
+  config.vm.define "webserver1" do |webserver1|
+    webserver1.vm.box = "bento/ubuntu-24.04"
+    webserver1.vm.network "public_network", bridge: "wlp0s20f3"
+    webserver1.vm.synced_folder ".", "/vagrant", type: "virtualbox"
+    webserver1.vm.provision "shell", path: "bootstrap1.sh"
+  end
+
+  config.vm.define "private_server" do |private_server|
+    private_server.vm.box = "bento/ubuntu-24.04"
+    private_server.vm.network "private_network", ip: "192.168.50.3"
+    private_server.vm.synced_folder ".", "/vagrant", type: "virtualbox"
+    private_server.vm.provision "shell", path: "bootstrap2.sh"
+  end
+
+  config.vm.define "webserver2" do |webserver2|
+    webserver2.vm.box = "bento/ubuntu-24.04"
+    webserver2.vm.network "public_network", bridge: "wlp0s20f3"
+    webserver2.vm.synced_folder ".", "/vagrant", type: "virtualbox"
+    webserver2.vm.provision "shell", path: "bootstrap3.sh"
+  end
+end
