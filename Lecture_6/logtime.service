@@ -1,0 +1,9 @@
+[Unit]
+Description=Log current time every minute
+
+[Service]
+ExecStart=/usr/local/bin/logtime.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
