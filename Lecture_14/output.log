@@ -1,0 +1,201 @@
+# Піднімаємо docker-compose
+# docker-compose up -d
+
+# Підключаємося через докер до монго
+
+
+Current Mongosh Log ID:	670f8445deeeb0d84efe6910
+Connecting to:		mongodb://<credentials>@127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&authSource=admin&appName=mongosh+2.3.2
+Current Mongosh Log ID:	670f86189978afb6fefe6910
+Connecting to:		mongodb://<credentials>@127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&authSource=admin&appName=mongosh+2.3.2
+Using MongoDB:		8.0.1
+Using Mongosh:		2.3.2
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+
+To help improve our products, anonymous usage data is collected and sent to MongoDB periodically (https://www.mongodb.com/legal/privacy-policy).
+You can opt-out by running the disableTelemetry() command.
+
+------
+   The server generated these startup warnings when booting
+   2024-10-16T09:23:29.586+00:00: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine. See http://dochub.mongodb.org/core/prodnotes-filesystem
+   2024-10-16T09:23:30.241+00:00: For customers running the current memory allocator, we suggest changing the contents of the following sysfsFile
+   2024-10-16T09:23:30.241+00:00: For customers running the current memory allocator, we suggest changing the contents of the following sysfsFile
+   2024-10-16T09:23:30.241+00:00: We suggest setting the contents of sysfsFile to 0.
+   2024-10-16T09:23:30.241+00:00: Your system has glibc support for rseq built in, which is not yet supported by tcmalloc-google and has critical performance implications. Please set the environment variable GLIBC_TUNABLES=glibc.pthread.rseq=0
+   2024-10-16T09:23:30.241+00:00: vm.max_map_count is too low
+   2024-10-16T09:23:30.241+00:00: We suggest setting swappiness to 0 or 1, as swapping can cause performance problems.
+------
+
+# Обираємо нашу базу та створюємо юзера-власника бази 
+# echo "use gymDatabase
+#db.createUser({ user: 'gymAdmin', pwd: 'gymAdmin123', roles: [ { role: 'dbOwner', db: 'gymDatabase' } ] })" | docker exec -i gym-mongo mongosh -u admin -p admin123 --authenticationDatabase admin | tee -a output.log
+test> switched to db gymDatabase
+MongoServerError[Location51003]: User "gymAdmin@gymDatabase" already exists
+gymDatabase> Current Mongosh Log ID:	670f87c70b27553d45fe6910
+Connecting to:		mongodb://<credentials>@127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&authSource=gymDatabase&appName=mongosh+2.3.2
+Using MongoDB:		8.0.1
+Using Mongosh:		2.3.2
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+# Створюємо колекції та схеми, заповнюємо даними
+# echo 'use gymDatabase
+#db.createCollection("clients")
+#db.createCollection("memberships")
+#db.createCollection("workouts")
+#db.createCollection("trainers")
+# Записуємо дані clients
+#db.clients.insertMany([
+#  { client_id: 1, name: "Anna", age: 28, email: "anna@example.com" },
+#  { client_id: 2, name: "Oleh", age: 35, email: "oleh@example.com" },
+#  { client_id: 3, name: "Irina", age: 42, email: "irina@example.com" }
+#])
+#Записуємо дані в memberships
+#db.memberships.insertMany([
+##  { membership_id: 1, client_id: 1, start_date: "2023-01-01", end_date: "2023-12-31", type: "Standard" },
+#  { membership_id: 2, client_id: 2, start_date: "2023-03-01", end_date: "2023-12-31", type: "Premium" },
+#  { membership_id: 3, client_id: 3, start_date: "2023-06-01", end_date: "2024-05-31", type: "Basic" }
+#])
+# Записуємо дані в workouts collection
+#db.workouts.insertMany([
+#  { workout_id: 1, description: "Cardio routine", difficulty: "Medium" },
+#  { workout_id: 2, description: "Weight lifting", difficulty: "Hard" },
+#  { workout_id: 3, description: "Yoga session", difficulty: "Easy" }
+#])
+# Записуємо дані в trainers collection
+#db.trainers.insertMany([
+#  { trainer_id: 1, name: "Ivan", specialization: "Cardio" },
+#  { trainer_id: 2, name: "Oksana", specialization: "Strength Training" },
+#  { trainer_id: 3, name: "Nazar", specialization: "Yoga" }
+#])
+
+# # Виконуємо запити
+
+# Знаходимо клієнтів старше 30 років
+#db.clients.find({ age: { $gt: 30 } })
+# Список тренувань
+#db.workouts.find({ difficulty: "Medium" })
+# Виводимо інформацію про членство клієнта з певним client_id
+#db.memberships.find({ client_id: 2 })' | docker exec -i gym-mongo mongosh -u gymAdmin -p gymAdmin123 --authenticationDatabase gymDatabase | tee -a output.log
+
+
+# Нижче результати, які були записані в цей лог файл
+gymDatabase> [
+  {
+    _id: ObjectId('670f87c80b27553d45fe6915'),
+    membership_id: 2,
+    client_id: 2,
+    start_date: '2023-03-01',
+    end_date: '2023-12-31',
+    type: 'Premium'
+  }
+]
+gymDatabase> Current Mongosh Log ID:	670f88181933968621fe6910
+Connecting to:		mongodb://<credentials>@127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&authSource=gymDatabase&appName=mongosh+2.3.2
+Using MongoDB:		8.0.1
+Using Mongosh:		2.3.2
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+test> switched to db gymDatabase
+gymDatabase> { ok: 1 }
+gymDatabase> { ok: 1 }
+gymDatabase> { ok: 1 }
+gymDatabase> { ok: 1 }
+gymDatabase> ... ... ... ... {
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('670f88181933968621fe6911'),
+    '1': ObjectId('670f88181933968621fe6912'),
+    '2': ObjectId('670f88181933968621fe6913')
+  }
+}
+gymDatabase> ... ... ... ... {
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('670f88181933968621fe6914'),
+    '1': ObjectId('670f88181933968621fe6915'),
+    '2': ObjectId('670f88181933968621fe6916')
+  }
+}
+gymDatabase> ... ... ... ... {
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('670f88181933968621fe6917'),
+    '1': ObjectId('670f88181933968621fe6918'),
+    '2': ObjectId('670f88181933968621fe6919')
+  }
+}
+gymDatabase> ... ... ... ... {
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('670f88181933968621fe691a'),
+    '1': ObjectId('670f88181933968621fe691b'),
+    '2': ObjectId('670f88181933968621fe691c')
+  }
+}
+gymDatabase> [
+  {
+    _id: ObjectId('670f87c80b27553d45fe6912'),
+    client_id: 2,
+    name: 'Oleh',
+    age: 35,
+    email: 'oleh@example.com'
+  },
+  {
+    _id: ObjectId('670f87c80b27553d45fe6913'),
+    client_id: 3,
+    name: 'Irina',
+    age: 42,
+    email: 'irina@example.com'
+  },
+  {
+    _id: ObjectId('670f88181933968621fe6912'),
+    client_id: 2,
+    name: 'Oleh',
+    age: 35,
+    email: 'oleh@example.com'
+  },
+  {
+    _id: ObjectId('670f88181933968621fe6913'),
+    client_id: 3,
+    name: 'Irina',
+    age: 42,
+    email: 'irina@example.com'
+  }
+]
+gymDatabase> [
+  {
+    _id: ObjectId('670f87c80b27553d45fe6917'),
+    workout_id: 1,
+    description: 'Cardio routine',
+    difficulty: 'Medium'
+  },
+  {
+    _id: ObjectId('670f88181933968621fe6917'),
+    workout_id: 1,
+    description: 'Cardio routine',
+    difficulty: 'Medium'
+  }
+]
+gymDatabase> [
+  {
+    _id: ObjectId('670f87c80b27553d45fe6915'),
+    membership_id: 2,
+    client_id: 2,
+    start_date: '2023-03-01',
+    end_date: '2023-12-31',
+    type: 'Premium'
+  },
+  {
+    _id: ObjectId('670f88181933968621fe6915'),
+    membership_id: 2,
+    client_id: 2,
+    start_date: '2023-03-01',
+    end_date: '2023-12-31',
+    type: 'Premium'
+  }
+]
+gymDatabase> 
