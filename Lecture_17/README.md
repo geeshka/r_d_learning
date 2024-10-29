@@ -1,10 +1,10 @@
 1. Завдання 1
-   1.1 Заходимо на офсайт докера та встановлюємо для нашого дистрибутиву https://docs.docker.com/engine/install/ubuntu/
+Заходимо на офсайт докера та встановлюємо для нашого дистрибутиву https://docs.docker.com/engine/install/ubuntu/
 2. Завдання 2 
-   2.2 Створюємо файли .env, index.html та docker-compose.yml
-   2.3 Створюємо мережу appnet за допомогою команди docker network create appnet
+Створюємо файли .env, index.html та docker-compose.yml
+Створюємо мережу appnet за допомогою команди docker network create appnet
 3. Завдання 3 
-   3.1 Запускаємо наш докер-копмоз в фоновому режимі та дивимось результат
+Запускаємо наш докер-копмоз в фоновому режимі та дивимось результат
 geeshka@geeshka-desktop:~/r_d_learning/Lecture_17$ docker-compose up -d
 Starting postgres-container ... done
 Starting nginx-container    ... done
@@ -36,7 +36,7 @@ Accept-Ranges: bytes
    </html>
 
 4. Завдання 4
-   4.1 Перевірка мережей і томів, перевірка доступу до БД
+Перевірка мережей і томів, перевірка доступу до БД
 geeshka@geeshka-desktop:~/r_d_learning/Lecture_17$ docker network ls
 NETWORK ID     NAME                  DRIVER    SCOPE
 dedf1b8e52bb   appnet                bridge    local
@@ -65,7 +65,7 @@ postgres=#
 
 
 5. Масштабування
-   5.1 Спробуємо масштабувати командою docker-compose up -d --scale nginx=3 --force-recreate, та через специфічні налаштування конфігу docker-compose сервіса nginx отримуємо помилку
+Спробуємо масштабувати командою docker-compose up -d --scale nginx=3 --force-recreate, та через специфічні налаштування конфігу docker-compose сервіса nginx отримуємо помилку
 geeshka@geeshka-desktop:~/r_d_learning/Lecture_17$ docker-compose up -d --scale nginx=3 --force-recreate
 Recreating postgres-container ... 
 WARNING: The "nginx" service is using the custom container name "nginx-container". Docker requires each container to have a unique name. Remove the custom name to scale the service.
@@ -109,7 +109,7 @@ Traceback (most recent call last):
 KeyError: 'ContainerConfig'
 [783757] Failed to execute script docker-compose
 
-5.2 Виправити можна, закоментувавши рядки container_name та рядок з пробросом портів, щоб не було конфліктів, та зробивши docker-compose down для перестворення контейнерів:
+Виправити можна, закоментувавши рядки container_name та рядок з пробросом портів, щоб не було конфліктів, та зробивши docker-compose down для перестворення контейнерів:
 
 geeshka@geeshka-desktop:~/r_d_learning/Lecture_17$ nano docker-compose.yml 
 geeshka@geeshka-desktop:~/r_d_learning/Lecture_17$ docker-compose down
