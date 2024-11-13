@@ -1,3 +1,12 @@
 Lecture_17/.env
 Lecture_17/web-data
 Lecture_17/db-data
+Lecture_20/.terraform
+Lecture_20/.terraform.lock.hcl
+Lecture_20/terraform.tfstate
+Lecture_20/terraform.tfstate.backup
+Lecture_20/terra-st.pem
+Lecture_20/terra_accessKeys.csv
+Lecture_20/setup.sh
+Lecture_20/main.tf
+
