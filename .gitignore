@@ -9,4 +9,8 @@ Lecture_20/terra-st.pem
 Lecture_20/terra_accessKeys.csv
 Lecture_20/setup.sh
 Lecture_20/main.tf
-
+Lecture_30/.terraform
+Lecture_30/.terraform.lock.hcl
+Lecture_30/.terraform.tfstate.lock.info
+Lecture_30/terraform.tfstate
+Lecture_30/terraform.tfstate.backup
