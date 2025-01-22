@@ -1,0 +1,4 @@
+---
+# vars file for roles/baseline
+# roles/baseline/vars/main.yml
+ssh_public_key: "{{ lookup('file', '~/.ssh/lecture32.pub') }}"

@@ -1,0 +1,14 @@
+---
+- name: Установка PostgreSQL
+  apt:
+    name: postgresql
+    state: present
+    update_cache: yes
+
+- name: Настройка пароля пользователя postgres
+  become: yes
+  become_user: postgres
+  shell: |
+    psql -c "ALTER USER postgres PASSWORD '{{ postgresql_password }}';"
+  args:
+    executable: /bin/bash

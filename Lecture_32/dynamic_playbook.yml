@@ -1,0 +1,9 @@
+- name: Configure AWS instance
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: Check if port 22 is open
+      wait_for:
+        port: 22
+        timeout: 30
+      delegate_to: "{{ inventory_hostname }}"

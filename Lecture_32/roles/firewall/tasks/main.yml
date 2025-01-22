@@ -1,0 +1,26 @@
+---
+
+- name: Ensure ufw is installed
+  ansible.builtin.apt:
+    name: ufw
+    state: present
+
+- name: Enable ufw
+  ansible.builtin.ufw:
+    state: enabled
+    logging: 'on'
+
+- name: Allow SSH connections
+  ansible.builtin.ufw:
+    rule: allow
+    port: 22
+    proto: tcp
+
+- name: Allow HTTP and HTTPS connections
+  ansible.builtin.ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  loop:
+    - 80   
+    - 443 

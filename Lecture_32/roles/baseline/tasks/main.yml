@@ -1,0 +1,27 @@
+# tasks file for roles/baseline
+# roles/baseline/tasks/main.yml
+---
+- name: Ensure user geeshka exists
+  user:
+    name: geeshka
+    state: present
+    shell: /bin/bash
+    groups: sudo
+    append: yes
+    create_home: yes
+
+- name: Add SSH public key to authorized_keys
+  authorized_key:
+    user: geeshka 
+    state: present
+    key: "{{ ssh_public_key }}"
+
+- name: Ensure basic packages are installed
+  apt:
+    name:
+      - vim
+      - git
+      - mc
+      - ufw
+    state: present
+    update_cache: yes

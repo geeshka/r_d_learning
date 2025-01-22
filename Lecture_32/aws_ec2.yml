@@ -1,0 +1,15 @@
+plugin: amazon.aws.aws_ec2
+regions:
+  - eu-north-1
+filters:
+  instance-state-name: running
+hostnames:
+  - tag:Name
+compose:
+  #ansible_host: 13.50.129.41
+  ansible_user: ubuntu
+  ansible_ssh_private_key_file: /home/geeshka/.ssh/lecture22.pem
+  ansible_python_interpreter: /usr/bin/python3
+keyed_groups:
+  - prefix: tag_
+    key: tags
