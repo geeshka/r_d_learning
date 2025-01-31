@@ -1,0 +1,30 @@
+server:
+  http_listen_address: 0.0.0.0
+  http_listen_port: 9080
+
+positions:
+  filename: "/var/promtail/positions.yaml"
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: nginx_logs
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: nginx
+          host: 10.0.2.26
+          __path__: /var/log/nginx/*.log
+
+    pipeline_stages:
+      - regex:
+          expression: '^(?P<time>\S+ \S+) \[(?P<level>\w+)\] (?P<message>.*)$'
+      - timestamp:
+          format: "2006-01-02T15:04:05.000Z07:00"
+          source: time
+      - labels:
+          level:
+      - output:
+          source: message
